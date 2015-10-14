@@ -30,7 +30,7 @@ node_version_map = {
 
 @hook('install')
 def install():
-    if is_state('nodejs.installed') and not is_state('nodejs.upgrade'):
+    if is_state('node.installed') and not is_state('node.upgrade'):
         return
 
     hookenv.status_set('maintenance',
@@ -42,7 +42,7 @@ def install():
 
         hookenv.status_set('maintenance', status_msg)
         hookenv.log('ERROR', status_msg)
-        remove_state('nodejs.installed')
+        remove_state('node.installed')
         sys.exit(1)
 
         try:
@@ -56,7 +56,7 @@ def install():
             hookenv.status_set('maintenance', status_msg)
             hookenv.log('ERROR', status_msg)
         hookenv.status_set('active', 'ready')
-        set_state('nodejs.installed')
+        set_state('node.installed')
 
 if __name__ == "__main__":
     main()
