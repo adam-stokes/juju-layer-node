@@ -45,18 +45,23 @@ def install():
         remove_state('node.installed')
         sys.exit(1)
 
-        try:
-            hookenv.status_set('maintenance', 'Installing Node.js')
-            url = node_version_map[config['node-version']]
-            cmd = ['curl -sL {} | bash -e'.format(url)]
-            check_output(cmd)
-            apt_install(['nodejs'])
-        except:
-            status_msg = ('Problem install Node.js')
-            hookenv.status_set('maintenance', status_msg)
-            hookenv.log('ERROR', status_msg)
-        hookenv.status_set('active', 'ready')
-        set_state('node.installed')
+    try:
+        url = node_version_map[config['node-version']]
+        hookenv.status_set('maintenance',
+                           'Installing Node.js: {}'.format(url))
+        cmd = ['curl -sL {} | bash -e'.format(url)]
+        hookenv.status_set('maintenance',
+                           'Running: {}'.format(cmd))
+        ret = check_output(cmd)
+        hookenv.status_set('maintenance',
+                           'Install returned: {}'.format(ret))
+        apt_install(['nodejs'])
+    except:
+        status_msg = ('Problem install Node.js')
+        hookenv.status_set('maintenance', status_msg)
+        hookenv.log('ERROR', status_msg)
+    hookenv.status_set('active', 'ready')
+    set_state('node.installed')
 
 if __name__ == "__main__":
     main()
