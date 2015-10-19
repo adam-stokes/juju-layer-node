@@ -1,5 +1,5 @@
 import sys
-from subprocess import check_output
+from subprocess import Popen, PIPE
 
 from charms.reactive import (
     hook,
@@ -30,7 +30,7 @@ node_version_map = {
 
 @hook('install')
 def install():
-    if is_state('node.installed') and not is_state('node.upgrade'):
+    if is_state('nodejs.installed') and not is_state('nodejs.upgrade'):
         return
 
     hookenv.status_set('maintenance',
@@ -42,26 +42,23 @@ def install():
 
         hookenv.status_set('maintenance', status_msg)
         hookenv.log('ERROR', status_msg)
-        remove_state('node.installed')
+        remove_state('nodejs.installed')
         sys.exit(1)
 
-    try:
-        url = node_version_map[config['node-version']]
-        hookenv.status_set('maintenance',
-                           'Installing Node.js: {}'.format(url))
-        cmd = ['curl -sL {} | bash -e'.format(url)]
-        hookenv.status_set('maintenance',
-                           'Running: {}'.format(cmd))
-        ret = check_output(cmd)
-        hookenv.status_set('maintenance',
-                           'Install returned: {}'.format(ret))
-        apt_install(['nodejs'])
-    except:
-        status_msg = ('Problem install Node.js')
-        hookenv.status_set('maintenance', status_msg)
-        hookenv.log('ERROR', status_msg)
+    url = node_version_map[config['node-version']]['remote']
+    hookenv.status_set('maintenance',
+                       'Installing Node.js: {}'.format(url))
+    curl_cmd = ['curl', '-sl', url]
+    bash_cmd = ['bash', '-e']
+    pipe1 = Popen(curl_cmd, stdout=PIPE)
+    pipe2 = Popen(bash_cmd, stdin=pipe1.stdout, stdout=PIPE)
+    pipe1.stdout.close()
+    output = pipe2.communicate()[0]
+    hookenv.log('DEBUG', 'Finished install, output: {}'.format(output))
+    hookenv.status_set('maintenance', 'Installing Node.js completed.')
+    apt_install(['nodejs'])
     hookenv.status_set('active', 'ready')
-    set_state('node.installed')
+    set_state('nodejs.installed')
 
 if __name__ == "__main__":
     main()
