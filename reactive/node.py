@@ -30,7 +30,7 @@ node_version_map = {
 
 @hook('install')
 def install():
-    if is_state('nodejs.installed') and not is_state('nodejs.upgrade'):
+    if is_state('nodejs.installed'):
         return
 
     hookenv.status_set('maintenance',
