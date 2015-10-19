@@ -54,9 +54,11 @@ def install():
     pipe2 = Popen(bash_cmd, stdin=pipe1.stdout, stdout=PIPE)
     pipe1.stdout.close()
     output = pipe2.communicate()[0]
-    hookenv.log('DEBUG', 'Finished install, output: {}'.format(output))
-    hookenv.status_set('maintenance', 'Installing Node.js completed.')
+    hookenv.log('DEBUG', 'Added nodesource archive, output: {}'.format(output))
+
     apt_install(['nodejs'])
+    hookenv.status_set('maintenance', 'Installing Node.js completed.')
+
     hookenv.status_set('active', 'ready')
     set_state('nodejs.installed')
 
