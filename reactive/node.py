@@ -48,13 +48,18 @@ def install():
     url = node_version_map[config['node-version']]['remote']
     hookenv.status_set('maintenance',
                        'Installing Node.js: {}'.format(url))
-    curl_cmd = ['curl', '-sl', url]
-    bash_cmd = ['bash', '-e']
-    pipe1 = Popen(curl_cmd, stdout=PIPE)
-    pipe2 = Popen(bash_cmd, stdin=pipe1.stdout, stdout=PIPE)
-    pipe1.stdout.close()
-    output = pipe2.communicate()[0]
-    hookenv.log('DEBUG', 'Added nodesource archive, output: {}'.format(output))
+    try:
+        curl_cmd = ['curl', '-sl', url]
+        bash_cmd = ['bash', '-e']
+        pipe1 = Popen(curl_cmd, stdout=PIPE)
+        pipe2 = Popen(bash_cmd, stdin=pipe1.stdout, stdout=PIPE)
+        pipe1.stdout.close()
+        output = pipe2.communicate()[0]
+        hookenv.log('DEBUG',
+                    'Added nodesource archive, output: {}'.format(output))
+    except:
+        hookenv.log('ERROR', 'Problem installing: {}'.format(output))
+        sys.exit(1)
 
     apt_install(['nodejs'])
     hookenv.status_set('maintenance', 'Installing Node.js completed.')
