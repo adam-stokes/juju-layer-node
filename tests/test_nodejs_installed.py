@@ -1,7 +1,4 @@
-from charmhelpers.core import hookenv
 import os
-
-config = hookenv.config()
 
 
 class TestNodeJSInstalled:
