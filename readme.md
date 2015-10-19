@@ -1,7 +1,7 @@
 # layer-node
 > Juju charms.reactive layer for NodeJS
 
-# Emitted States
+# emitters
 
 **nodejs.installed** - This state is emitted once Node.js has been installed.
 Rely on this state to perform an application deployment when Node.js is ready
