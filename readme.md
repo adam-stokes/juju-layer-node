@@ -1,6 +1,12 @@
 # layer-node
 > Juju charms.reactive layer for NodeJS
 
+# Emitted States
+
+**nodejs.installed** - This state is emitted once Node.js has been installed.
+Rely on this state to perform an application deployment when Node.js is ready
+to be used.
+
 # license
 
 The MIT License (MIT)
