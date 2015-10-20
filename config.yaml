@@ -6,6 +6,7 @@ options:
       v0.10, v0.12, v4.x
     type: string
   node-application-dir:
+    type: string
     default: 'dist'
     description: |
       The default location of your Node.js application, defaults $CHARM_DIR/dist
