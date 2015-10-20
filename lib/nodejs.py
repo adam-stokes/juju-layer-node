@@ -9,7 +9,7 @@ def node_dist_dir():
     """ Absolute path of Node.js application dir
     """
     config = hookenv.config()
-    return os.path.join(hookenv.charm_dir(), config['dist'])
+    return os.path.join(hookenv.charm_dir(), config['node-application-dir'])
 
 
 def npm(cmd):
