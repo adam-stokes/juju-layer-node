@@ -1,5 +1,6 @@
 import shlex
 import os
+from collections import deque
 import subprocess
 
 from charmhelpers.core import hookenv
@@ -22,5 +23,6 @@ def npm(cmd):
     :rtype bool: Returns True/False of npm execution status
     """
     if isinstance(cmd, str):
-        cmd = shlex.split(cmd)
-    return subprocess.call(cmd) == 0
+        cmd = deque(shlex.split(cmd))
+    cmd.appendleft('npm')
+    return subprocess.check_call(cmd) == 0

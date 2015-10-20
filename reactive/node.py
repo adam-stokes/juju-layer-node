@@ -41,7 +41,7 @@ def install():
             config['node-version']))
 
         hookenv.status_set('maintenance', status_msg)
-        hookenv.log('ERROR', status_msg)
+        hookenv.log(status_msg, 'error')
         remove_state('nodejs.installed')
         sys.exit(1)
 
@@ -55,10 +55,11 @@ def install():
         pipe2 = Popen(bash_cmd, stdin=pipe1.stdout, stdout=PIPE)
         pipe1.stdout.close()
         output = pipe2.communicate()[0]
-        hookenv.log('DEBUG',
-                    'Added nodesource archive, output: {}'.format(output))
+        hookenv.log('Added nodesource archive, output: {}'.format(output),
+                    'debug')
     except:
-        hookenv.log('ERROR', 'Problem installing: {}'.format(output))
+        hookenv.log('Problem installing: {}'.format(output),
+                    'debug')
         sys.exit(1)
 
     apt_install(['nodejs'])
