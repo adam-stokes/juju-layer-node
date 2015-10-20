@@ -5,3 +5,7 @@ options:
       NodeJS Version to use for your application. Supported versions are
       v0.10, v0.12, v4.x
     type: string
+  node-application-dir:
+    default: 'dist'
+    description: |
+      The default location of your Node.js application, defaults $CHARM_DIR/dist

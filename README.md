@@ -7,6 +7,29 @@
 Rely on this state to perform an application deployment when Node.js is ready
 to be used.
 
+# api
+
+All helper modules are found in `lib/node.py`
+
+Example,
+
+```
+
+from nodejs import npm, node_dist_dir
+
+print(node_dist_dir())
+# /var/lib/juju/agents/unit-node-0/charm/dist
+
+@when('nodejs.installed')
+def install_deps():
+    npm('install')
+
+@when('<app>.installed')
+def run_tests():
+   npm('test')
+   npm('run build')
+```
+
 # license
 
 The MIT License (MIT)
