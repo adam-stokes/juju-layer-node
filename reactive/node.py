@@ -40,7 +40,7 @@ def install():
         status_msg = ('Unknown Node.js version specified: {}'.format(
             config['node-version']))
 
-        hookenv.status_set('maintenance', status_msg)
+        hookenv.status_set('error', status_msg)
         hookenv.log(status_msg, 'error')
         remove_state('nodejs.installed')
         sys.exit(1)
