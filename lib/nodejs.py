@@ -38,6 +38,8 @@ def npm(cmd):
     os.chdir(node_dist_dir())
     if isinstance(cmd, str):
         cmd = deque(shlex.split(cmd))
+    else:
+        cmd = deque(cmd)
     cmd.appendleft('npm')
     try:
         subprocess.check_call(cmd)
