@@ -9,7 +9,7 @@ to be used.
 
 # api
 
-All helper modules are found in `lib/node.py`
+All helper modules are found in `lib/nodejs.py`
 
 Example,
 
