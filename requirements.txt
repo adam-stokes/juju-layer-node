@@ -1,4 +1,3 @@
 tox
-pytest
 flakes
 pep8
