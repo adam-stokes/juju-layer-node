@@ -30,8 +30,10 @@ node_version_map = {
 
 
 @when('nodejs.install_runtime')
-def install_runtime():
+def __install_runtime():
     """ Installs defined node runtime
+
+    You should use node_switch('version') to make use of this reactor.
 
     Reactor:
     nodejs.install_runtime: Emit this state to kick off a node.js install
