@@ -24,6 +24,11 @@ def node_dist_dir():
 def node_switch(ver):
     """ Switches installed version of Node.js
 
+    This should be your entry point when wanting to switch Node.js
+    versions as this takes care of setting/removing the proper reactive
+    states for this routine. In addition, it catches any improper version
+    string and reports it to Juju.
+
     Arguments:
     ver: Version string of Node.js (0.10, 0.12, 4.x)
     """

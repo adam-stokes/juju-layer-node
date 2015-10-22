@@ -31,6 +31,14 @@ node_version_map = {
 
 @when('nodejs.install_runtime')
 def install_runtime():
+    """ Installs defined node runtime
+
+    Reactor:
+    nodejs.install_runtime: Emit this state to kick off a node.js install
+
+    Emits:
+    nodejs.installed: Emitted once the runtime has been installed
+    """
     remove_state('nodejs.installed')
     hookenv.status_set('maintenance',
                        'Installing Node.js {}'.format(config['node-version']))
