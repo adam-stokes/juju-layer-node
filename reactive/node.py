@@ -60,6 +60,7 @@ def install_runtime():
     hookenv.status_set('maintenance', 'Installing Node.js completed.')
 
     hookenv.status_set('active', 'ready')
+    remove_state('nodejs.install_runtime')
     set_state('nodejs.installed')
 
 if __name__ == "__main__":
