@@ -50,7 +50,7 @@ def __install_runtime():
 
     url = node_version_map[config['node-version']]['remote']
     hookenv.status_set('maintenance',
-                       'Installing Node.js: {}'.format(url))
+                       'Using Node.js Repo: {}'.format(url))
     try:
         curl_cmd = ['curl', '-sl', url]
         bash_cmd = ['bash', '-e']
