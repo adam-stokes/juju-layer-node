@@ -3,9 +3,13 @@
 
 # emitters
 
-**nodejs.installed** - This state is emitted once Node.js has been installed.
-Rely on this state to perform an application deployment when Node.js is ready
-to be used.
+**nodejs.installed** - This state is automatically emitted once Node.js has been
+installed. Rely on this state to perform an application deployment when Node.js
+is ready to be used.
+
+**nodejs.install_runtime** - Emit this state if you wish to install a Node.js
+version. This is useful if you want to switch out the underlying default Node.js
+runtime with another supported runtime (e.g. 0.12)
 
 # api
 
@@ -15,10 +19,13 @@ Example,
 
 ```
 
-from nodejs import npm, node_dist_dir
+from nodejs import npm, node_dist_dir, node_switch
 
 print(node_dist_dir())
 # /var/lib/juju/agents/unit-node-0/charm/dist
+
+# Switch to another runtime
+node_switch('0.10')
 
 @when('nodejs.installed')
 def install_deps():

@@ -1,17 +1,18 @@
+import os
 import sys
 from subprocess import Popen, PIPE
 
 from charms.reactive import (
-    hook,
+    when,
     set_state,
-    is_state,
     remove_state,
     main
 )
 
 from charmhelpers.core import hookenv
 from charmhelpers.fetch import (
-    apt_install
+    apt_install,
+    apt_purge
 )
 
 config = hookenv.config()
@@ -28,22 +29,14 @@ node_version_map = {
 }
 
 
-@hook('install')
-def install():
-    if is_state('nodejs.installed'):
-        return
-
+@when('nodejs.install_runtime')
+def install_runtime():
+    remove_state('nodejs.installed')
     hookenv.status_set('maintenance',
                        'Installing Node.js {}'.format(config['node-version']))
 
-    if config['node-version'] not in ['0.12', '0.10', '4.x']:
-        status_msg = ('Unknown Node.js version specified: {}'.format(
-            config['node-version']))
-
-        hookenv.status_set('blocked', status_msg)
-        hookenv.log(status_msg, 'error')
-        remove_state('nodejs.installed')
-        sys.exit(1)
+    if os.path.isfile('/etc/apt/sources.list.d/nodesource.list'):
+        os.remove('/etc/apt/sources.list.d/nodesource.list')
 
     url = node_version_map[config['node-version']]['remote']
     hookenv.status_set('maintenance',
@@ -62,6 +55,7 @@ def install():
                     'debug')
         sys.exit(1)
 
+    apt_purge(['nodejs'])
     apt_install(['nodejs'])
     hookenv.status_set('maintenance', 'Installing Node.js completed.')
 
