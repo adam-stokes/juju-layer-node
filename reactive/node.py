@@ -25,6 +25,9 @@ node_version_map = {
     },
     '4.x': {
         'remote': 'https://deb.nodesource.com/setup_4.x'
+    },
+    '5.x': {
+        'remote': 'https://deb.nodesource.com/setup_5.x'
     }
 }
 
