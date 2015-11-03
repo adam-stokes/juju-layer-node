@@ -33,7 +33,7 @@ def node_switch(ver):
     ver: Version string of Node.js (0.10, 0.12, 4.x)
     """
     config = hookenv.config()
-    if config['node-version'] not in ['0.12', '0.10', '4.x']:
+    if config['node-version'] not in ['0.12', '0.10', '4.x', '5.x']:
         status_msg = ('Unknown Node.js version specified: {}'.format(
             config['node-version']))
 
