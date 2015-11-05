@@ -38,9 +38,6 @@ def install_nodejs():
 
     You should use node_switch('version') to make use of this reactor.
 
-    Reactor:
-    nodejs.install_runtime: Emit this state to kick off a node.js install
-
     Emits:
     nodejs.installed: Emitted once the runtime has been installed
     """
