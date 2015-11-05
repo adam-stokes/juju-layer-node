@@ -1,5 +1,0 @@
-name: node
-summary: |
-  Node.js is a JavaScript runtime built on
-  Chrome's V8 JavaScript engine.
-maintainers: ['Adam Stokes <adam.stokes@ubuntu.com>']
