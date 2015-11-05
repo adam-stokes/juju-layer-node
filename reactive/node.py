@@ -73,11 +73,5 @@ def install_nodejs():
     set_state('nodejs.available')
 
 
-@hook('config-changed')
-def config_changed():
-    if config.changed('node-version'):
-        install_nodejs()
-
-
 if __name__ == "__main__":
     main()
