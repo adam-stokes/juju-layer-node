@@ -5,10 +5,6 @@ from collections import deque
 import subprocess
 
 from charmhelpers.core import hookenv
-from charms.reactive import (
-    set_state,
-    remove_state
-)
 
 
 def node_dist_dir():
@@ -19,30 +15,6 @@ def node_dist_dir():
     """
     config = hookenv.config()
     return os.path.join(hookenv.charm_dir(), config['node-application-dir'])
-
-
-def node_switch(ver):
-    """ Switches installed version of Node.js
-
-    This should be your entry point when wanting to switch Node.js
-    versions as this takes care of setting/removing the proper reactive
-    states for this routine. In addition, it catches any improper version
-    string and reports it to Juju.
-
-    Arguments:
-    ver: Version string of Node.js (0.10, 0.12, 4.x)
-    """
-    config = hookenv.config()
-    if config['node-version'] not in ['0.12', '0.10', '4.x', '5.x']:
-        status_msg = ('Unknown Node.js version specified: {}'.format(
-            config['node-version']))
-
-        hookenv.status_set('blocked', status_msg)
-        hookenv.log(status_msg, 'error')
-        remove_state('nodejs.install_runtime')
-        sys.exit(1)
-    config['node-version'] = ver
-    set_state('nodejs.install_runtime')
 
 
 def npm(cmd):

@@ -3,7 +3,7 @@ import sys
 from subprocess import Popen, PIPE
 
 from charms.reactive import (
-    when,
+    hook,
     set_state,
     remove_state,
     main
@@ -32,8 +32,8 @@ node_version_map = {
 }
 
 
-@when('nodejs.install_runtime')
-def __install_runtime():
+@hook('install')
+def install_nodejs():
     """ Installs defined node runtime
 
     You should use node_switch('version') to make use of this reactor.
@@ -44,7 +44,7 @@ def __install_runtime():
     Emits:
     nodejs.installed: Emitted once the runtime has been installed
     """
-    remove_state('nodejs.installed')
+    remove_state('nodejs.available')
     hookenv.status_set('maintenance',
                        'Installing Node.js {}'.format(config['node-version']))
 
@@ -72,9 +72,15 @@ def __install_runtime():
     apt_install(['nodejs'])
     hookenv.status_set('maintenance', 'Installing Node.js completed.')
 
-    hookenv.status_set('active', 'ready')
-    remove_state('nodejs.install_runtime')
-    set_state('nodejs.installed')
+    hookenv.status_set('active', 'Node.js is ready!')
+    set_state('nodejs.available')
+
+
+@hook('config-changed')
+def config_changed():
+    if config.changed('node-version'):
+        install_nodejs()
+
 
 if __name__ == "__main__":
     main()
