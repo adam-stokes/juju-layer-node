@@ -39,7 +39,7 @@ def install_nodejs():
     You should use node_switch('version') to make use of this reactor.
 
     Emits:
-    nodejs.installed: Emitted once the runtime has been installed
+    nodejs.available: Emitted once the runtime has been installed
     """
     remove_state('nodejs.available')
     hookenv.status_set('maintenance',
