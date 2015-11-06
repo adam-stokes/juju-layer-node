@@ -3,7 +3,7 @@
 
 # emitters
 
-**nodejs.installed** - This state is automatically emitted once Node.js has been
+**nodejs.available** - This state is automatically emitted once Node.js has been
 installed. Rely on this state to perform an application deployment when Node.js
 is ready to be used.
 
