@@ -5,8 +5,8 @@ options:
       NodeJS Version to use for your application. Supported versions are
       0.10, 0.12, 4.x, 5.x
     type: string
-  node-application-dir:
+  app-path:
     type: string
-    default: 'dist'
+    default: '/srv/app'
     description: |
-      The default location of your Node.js application, defaults $CHARM_DIR/dist
+      The default location of your Node.js application, defaults /srv/app

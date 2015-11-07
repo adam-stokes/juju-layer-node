@@ -18,7 +18,7 @@ Example,
 from nodejs import npm, node_dist_dir
 
 print(node_dist_dir())
-# /var/lib/juju/agents/unit-node-0/charm/dist
+# /srv/app
 
 @when('nodejs.installed')
 def install_deps():

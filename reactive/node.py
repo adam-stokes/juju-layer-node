@@ -1,6 +1,7 @@
 import os
 import sys
 from subprocess import Popen, PIPE
+from shell import shell
 
 from charms.reactive import (
     hook,
@@ -66,7 +67,7 @@ def install_nodejs():
         sys.exit(1)
 
     apt_purge(['nodejs'])
-    apt_install(['nodejs'])
+    shell('apt-get install -qy nodejs')
     hookenv.status_set('maintenance', 'Installing Node.js completed.')
 
     hookenv.status_set('active', 'Node.js is ready!')
