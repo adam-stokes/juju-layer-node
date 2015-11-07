@@ -1,8 +1,6 @@
-import shlex
 import os
 import sys
-from collections import deque
-import subprocess
+from shell import shell
 
 from charmhelpers.core import hookenv
 
@@ -36,14 +34,12 @@ def npm(cmd):
     """
     hookenv.status_set('maintenance', 'Installing NPM dependencies')
     os.chdir(node_dist_dir())
-    if isinstance(cmd, str):
-        cmd = deque(shlex.split(cmd))
-    else:
-        cmd = deque(cmd)
-    cmd.appendleft('npm')
-    try:
-        subprocess.check_call(cmd)
-        os.chdir(os.getenv('CHARM_DIR'))
-    except subprocess.CalledProcessError as e:
-        hookenv.status_set("blocked", "NPM error: {}".format(e))
-        sys.exit(1)
+    if not isinstance(cmd, str):
+        hookenv.status_set('blocked', '{}: should be a string'.format(cmd))
+        sys.exit(0)
+    os.chdir(os.getenv('CHARM_DIR'))
+    cmd = ("npm {}".format(cmd))
+    sh = shell(cmd)
+    if sh.code > 0:
+        hookenv.status_set("blocked", "NPM error: {}".format(sh.errors()))
+        sys.exit(0)

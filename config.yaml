@@ -1,9 +1,9 @@
 options:
   node-version:
-    default: '4.x'
+    default: '5.x'
     description: |
       NodeJS Version to use for your application. Supported versions are
-      v0.10, v0.12, v4.x
+      0.10, 0.12, 4.x, 5.x
     type: string
   node-application-dir:
     type: string
