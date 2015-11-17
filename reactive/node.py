@@ -1,7 +1,6 @@
 import os
 import sys
 from subprocess import Popen, PIPE
-from shell import shell
 
 from charms.reactive import (
     hook,
@@ -12,8 +11,8 @@ from charms.reactive import (
 
 from charmhelpers.core import hookenv
 from charmhelpers.fetch import (
-    apt_install,
-    apt_purge
+    apt_purge,
+    apt_install
 )
 
 config = hookenv.config()
@@ -36,8 +35,6 @@ node_version_map = {
 @hook('install')
 def install_nodejs():
     """ Installs defined node runtime
-
-    You should use node_switch('version') to make use of this reactor.
 
     Emits:
     nodejs.available: Emitted once the runtime has been installed
@@ -67,7 +64,7 @@ def install_nodejs():
         sys.exit(1)
 
     apt_purge(['nodejs'])
-    shell('apt-get install -qy nodejs')
+    apt_install(['nodejs'])
     hookenv.status_set('maintenance', 'Installing Node.js completed.')
 
     hookenv.status_set('active', 'Node.js is ready!')
