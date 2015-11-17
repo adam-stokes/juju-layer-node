@@ -20,7 +20,7 @@ from nodejs import npm, node_dist_dir
 print(node_dist_dir())
 # /srv/app
 
-@when('nodejs.installed')
+@when('nodejs.available')
 def install_deps():
     npm('install')
     npm('test')
