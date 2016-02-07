@@ -37,5 +37,15 @@ def install_nodejs():
     set_state('nodejs.available')
 
 
+@hook('config-changed')
+def version_check():
+    url = config.get('install_sources')
+    key = config.get('install_keys')
+
+    if url != kv.get('nodejs.url') or key != kv.get('nodejs.key'):
+        apt.purge(['nodejs'])
+        remove_state('nodejs.available')
+
+
 if __name__ == "__main__":
     main()
