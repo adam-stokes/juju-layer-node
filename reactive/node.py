@@ -1,73 +1,39 @@
-import os
-import sys
-from subprocess import Popen, PIPE
-
 from charms.reactive import (
     hook,
     set_state,
     remove_state,
-    main
+    main,
+    when_not,
 )
 
-from charmhelpers.core import hookenv
-from charmhelpers.fetch import (
-    apt_purge,
-    apt_install
+from charmhelpers.core import (
+    hookenv,
+    unitdata,
 )
+
+from charms import apt
+
 
 config = hookenv.config()
-node_version_map = {
-    '0.10': {
-        'remote': 'https://deb.nodesource.com/setup_0.10'
-    },
-    '0.12': {
-        'remote': 'https://deb.nodesource.com/setup_0.12'
-    },
-    '4.x': {
-        'remote': 'https://deb.nodesource.com/setup_4.x'
-    },
-    '5.x': {
-        'remote': 'https://deb.nodesource.com/setup_5.x'
-    }
-}
+kv = unitdata.kv()
 
 
-@hook('install')
+@when_not('nodejs.available')
 def install_nodejs():
     """ Installs defined node runtime
 
     Emits:
     nodejs.available: Emitted once the runtime has been installed
     """
-    remove_state('nodejs.available')
-    hookenv.status_set('maintenance',
-                       'Installing Node.js {}'.format(config['node-version']))
 
-    if os.path.isfile('/etc/apt/sources.list.d/nodesource.list'):
-        os.remove('/etc/apt/sources.list.d/nodesource.list')
+    hookenv.status_set('maintenance', 'installing Node.js')
 
-    url = node_version_map[config['node-version']]['remote']
-    hookenv.status_set('maintenance',
-                       'Using Node.js Repo: {}'.format(url))
-    try:
-        curl_cmd = ['curl', '-sl', url]
-        bash_cmd = ['bash', '-e']
-        pipe1 = Popen(curl_cmd, stdout=PIPE)
-        pipe2 = Popen(bash_cmd, stdin=pipe1.stdout, stdout=PIPE)
-        pipe1.stdout.close()
-        output = pipe2.communicate()[0]
-        hookenv.log('Added nodesource archive, output: {}'.format(output),
-                    'debug')
-    except:
-        hookenv.log('Problem installing: {}'.format(output),
-                    'debug')
-        sys.exit(1)
+    kv.set('nodejs.url', config.get('install_sources'))
+    kv.set('nodejs.key', config.get('install_keys'))
 
-    apt_purge(['nodejs'])
-    apt_install(['nodejs'])
-    hookenv.status_set('maintenance', 'Installing Node.js completed.')
+    apt.queue_install(['nodejs'])
 
-    hookenv.status_set('active', 'Node.js is ready!')
+    hookenv.status_set('active', 'node.js is ready')
     set_state('nodejs.available')
 
 
