@@ -5,8 +5,3 @@ options:
       NodeJS Version to use for your application. Supported versions are
       0.10, 0.12, 4.x, 5.x
     type: string
-  app-path:
-    type: string
-    default: '/srv/app'
-    description: |
-      The default location of your Node.js application, defaults /srv/app
