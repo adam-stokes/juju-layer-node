@@ -1,8 +1,11 @@
 import os
 import sys
+
 from shell import shell
 
-from charmhelpers.core import hookenv
+from charmhelpers.core.hookenv import status_set
+from charmhelpers.core.hookenv import storage_get
+from charmhelpers.core.hookenv import storage_list
 
 
 def node_dist_dir():
@@ -11,8 +14,8 @@ def node_dist_dir():
     Returns:
     Absolute string of node application directory
     """
-    config = hookenv.config()
-    return os.path.join(config['app-path'])
+    storage_id = storage_list('app')[0]
+    return storage_get('location', storage_id)
 
 
 def npm(cmd):
@@ -32,15 +35,15 @@ def npm(cmd):
     Returns:
     Will halt on error
     """
-    hookenv.status_set(
+    status_set(
         'maintenance',
-        'Installing NPM dependencies in {}'.format(node_dist_dir()))
+        'installing NPM dependencies for {}'.format(node_dist_dir()))
     os.chdir(node_dist_dir())
     if not isinstance(cmd, str):
-        hookenv.status_set('blocked', '{}: should be a string'.format(cmd))
+        status_set('blocked', '{}: should be a string'.format(cmd))
         sys.exit(0)
     cmd = ("npm {}".format(cmd))
     sh = shell(cmd)
     if sh.code > 0:
-        hookenv.status_set("blocked", "NPM error: {}".format(sh.errors()))
+        status_set("blocked", "NPM error: {}".format(sh.errors()))
         sys.exit(0)
