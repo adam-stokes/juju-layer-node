@@ -1,5 +1,7 @@
 options:
   install_sources:
-    default: "https://deb.nodesource.com/node_4.x trusty main"
+    default: |
+      - "https://deb.nodesource.com/node_4.x trusty main"
   install_keys:
-    default: "68576280"
+    default: |
+      - 68576280
