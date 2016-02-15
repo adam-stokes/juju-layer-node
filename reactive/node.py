@@ -4,6 +4,7 @@ from charms.reactive import (
     remove_state,
     main,
     when_not,
+    when,
 )
 
 from charmhelpers.core import (
@@ -26,13 +27,15 @@ def install_nodejs():
     nodejs.available: Emitted once the runtime has been installed
     """
 
-    hookenv.status_set('maintenance', 'installing Node.js')
-
     kv.set('nodejs.url', config.get('install_sources'))
     kv.set('nodejs.key', config.get('install_keys'))
 
     apt.queue_install(['nodejs'])
 
+
+@when('apt.installed.nodejs')
+@when_not('nodejs.available')
+def node_js_ready():
     hookenv.status_set('active', 'node.js is ready')
     set_state('nodejs.available')
 
