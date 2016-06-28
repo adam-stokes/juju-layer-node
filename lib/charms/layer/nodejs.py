@@ -1,11 +1,9 @@
-import os
 import sys
 
-from shell import shell
+from subprocess import Popen, PIPE
 
-from charmhelpers.core.hookenv import status_set
-from charmhelpers.core.hookenv import storage_get
-from charmhelpers.core.hookenv import storage_list
+from charmhelpers.core import hookenv
+from charmhelpers.core import host
 
 
 def node_dist_dir():
@@ -14,11 +12,11 @@ def node_dist_dir():
     Returns:
     Absolute string of node application directory
     """
-    storage_id = storage_list('app')[0]
-    return storage_get('location', storage_id)
+    storage_id = hookenv.storage_list('app')[0]
+    return hookenv.storage_get('location', storage_id)
 
 
-def npm(cmd):
+def npm(*cmd):
     """ Runs npm
 
     This layer relies on the use of npm scripts defined in `package.json`,
@@ -27,23 +25,24 @@ def npm(cmd):
     Usage:
 
        npm('install')
-       npm('run build')
+       npm('run', 'build')
 
     Arguments:
-    cmd: Command to run can be string or list
+    cmd: Command to run.  The list of all positional args will be passed in
+      as the first arg to `subprocess.run`.
 
     Returns:
     Will halt on error
     """
-    status_set(
+    dist_dir = node_dist_dir()
+    hookenv.status_set(
         'maintenance',
-        'installing NPM dependencies for {}'.format(node_dist_dir()))
-    os.chdir(node_dist_dir())
-    if not isinstance(cmd, str):
-        status_set('blocked', '{}: should be a string'.format(cmd))
-        sys.exit(0)
-    cmd = ("npm {}".format(cmd))
-    sh = shell(cmd)
-    if sh.code > 0:
-        status_set("blocked", "NPM error: {}".format(sh.errors()))
+        'installing NPM dependencies for {}'.format(dist_dir))
+    with host.chdir(dist_dir):
+        with Popen(['npm'] + list(cmd), stderr=PIPE) as process:
+            _, errout = process.communicate()
+            retcode = process.poll()
+    if retcode != 0:
+        hookenv.log('NPM error: {}'.format(errout))
+        hookenv.status_set("blocked", "NPM error: {}".format(errout))
         sys.exit(0)
