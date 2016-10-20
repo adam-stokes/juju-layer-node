@@ -30,7 +30,7 @@ def install_nodejs():
     kv.set('nodejs.url', config.get('install_sources'))
     kv.set('nodejs.key', config.get('install_keys'))
 
-    apt.queue_install(['nodejs', 'npm', 'nodejs-legacy'])
+    apt.queue_install(['nodejs', 'npm'])
 
 
 @when('apt.installed.nodejs')
