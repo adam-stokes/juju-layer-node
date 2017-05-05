@@ -1,7 +1,3 @@
 name: nodejs
 summary: Node.js runtime
 description: Node.js runtime
-storage:
-  app:
-    type: filesystem
-    location: /srv/app

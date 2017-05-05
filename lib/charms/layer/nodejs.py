@@ -12,11 +12,10 @@ def node_dist_dir():
     Returns:
     Absolute string of node application directory
     """
-    storage_id = hookenv.storage_list('app')[0]
-    return hookenv.storage_get('location', storage_id)
+    return hookenv.config('app-dir')
 
 
-def npm(*cmd):
+def npm(cmd):
     """ Runs npm
 
     This layer relies on the use of npm scripts defined in `package.json`,
@@ -39,7 +38,7 @@ def npm(*cmd):
         'maintenance',
         'installing NPM dependencies for {}'.format(dist_dir))
     with host.chdir(dist_dir):
-        with Popen(['npm'] + list(cmd), stderr=PIPE) as process:
+        with Popen(['npm'] + cmd.split(), stderr=PIPE) as process:
             _, errout = process.communicate()
             retcode = process.poll()
     if retcode != 0:
