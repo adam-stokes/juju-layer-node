@@ -12,8 +12,7 @@ def node_dist_dir():
     Returns:
     Absolute string of node application directory
     """
-    storage_id = hookenv.storage_list('app')[0]
-    return hookenv.storage_get('location', storage_id)
+    return hookenv.config('app-dir')
 
 
 def npm(*cmd):

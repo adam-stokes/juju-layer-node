@@ -1,7 +1,14 @@
 options:
+  app-dir:
+    type: string
+    default: "/srv/app"
+    description: |
+      Directory where node app will live
   install_sources:
+    type: string
     default: |
       - "https://deb.nodesource.com/node_6.x main"
   install_keys:
+    type: string
     default: |
       - '68576280'

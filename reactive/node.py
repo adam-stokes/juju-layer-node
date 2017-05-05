@@ -1,3 +1,4 @@
+import os
 from charms.reactive import (
     hook,
     set_state,
@@ -10,6 +11,7 @@ from charms.reactive import (
 from charmhelpers.core import (
     hookenv,
     unitdata,
+    host
 )
 
 from charms import apt
@@ -19,6 +21,17 @@ config = hookenv.config()
 kv = unitdata.kv()
 
 
+@when_not('app-dir.available')
+def create_app_dir():
+    """Create node dir
+    """
+    app_dir = hookenv.config('app-dir')
+    if not os.path.exists(app_dir):
+        host.mkdir(app_dir, perms=0o755)
+    set_state('app-dir.available')
+
+
+@when('app-dir.available')
 @when_not('nodejs.available')
 def install_nodejs():
     """ Installs defined node runtime
@@ -48,7 +61,3 @@ def version_check():
     if url != kv.get('nodejs.url') or key != kv.get('nodejs.key'):
         apt.purge(['nodejs'])
         remove_state('nodejs.available')
-
-
-if __name__ == "__main__":
-    main()
